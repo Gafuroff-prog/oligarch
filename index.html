@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OLIGARCH — O'zbekiston</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#C9A84C;--gold-light:#E8C87A;--gold-dark:#8B6914;
+  --black:#0A0A0A;--dark:#111111;--dark2:#1A1A1A;--brown:#2C1A0E;
+  --glass-bg:rgba(255,255,255,0.04);--glass-border:rgba(201,168,76,0.18);
+  --glass-shadow:0 8px 32px rgba(0,0,0,0.6),0 1px 0 rgba(255,255,255,0.05) inset;
+  --text:#F0EAD6;--text-dim:rgba(240,234,214,0.55);
+  --radius:20px;--transition:all 0.4s cubic-bezier(0.23,1,0.32,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--text);font-family:'Montserrat',sans-serif;font-weight:300;overflow-x:hidden;cursor:none;}
+.cursor{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:99999;transition:transform 0.15s ease;mix-blend-mode:difference;}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,0.5);border-radius:50%;pointer-events:none;z-index:99998;transition:transform 0.35s cubic-bezier(0.23,1,0.32,1),width 0.3s,height 0.3s;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--dark);}::-webkit-scrollbar-thumb{background:var(--gold-dark);border-radius:2px;}
+ 
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 40px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,10,0.6);backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(201,168,76,0.1);transition:var(--transition);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;letter-spacing:0.25em;font-weight:600;color:var(--gold);text-decoration:none;text-transform:uppercase;}
+.nav-logo span{font-weight:300;color:var(--text-dim);font-size:11px;display:block;letter-spacing:0.4em;margin-top:-2px;}
+.nav-links{display:flex;gap:32px;align-items:center;}
+.nav-links a{color:var(--text-dim);text-decoration:none;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;transition:color 0.3s;position:relative;}
+.nav-links a:hover{color:var(--gold);}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s ease;}
+.nav-links a:hover::after{width:100%;}
+.nav-right{display:flex;gap:16px;align-items:center;}
+.cart-btn{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:50px;padding:10px 20px;color:var(--text);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;cursor:none;display:flex;align-items:center;gap:8px;backdrop-filter:blur(10px);transition:var(--transition);}
+.cart-btn:hover{background:rgba(201,168,76,0.12);border-color:rgba(201,168,76,0.4);color:var(--gold);}
+.cart-count{background:var(--gold);color:var(--black);border-radius:50%;width:18px;height:18px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:transform 0.3s;}
+ 
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at 30% 50%,rgba(44,26,14,0.8) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(201,168,76,0.06) 0%,transparent 50%),linear-gradient(180deg,#0A0A0A 0%,#111111 100%);}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(circle at 20% 80%,rgba(201,168,76,0.04) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(201,168,76,0.03) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:900px;padding:0 40px;}
+.hero-eyebrow{font-size:10px;letter-spacing:0.5em;color:var(--gold);text-transform:uppercase;margin-bottom:24px;opacity:0;animation:fadeUp 1s 0.3s forwards;}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(64px,10vw,140px);font-weight:300;line-height:0.9;letter-spacing:-0.02em;color:var(--text);opacity:0;animation:fadeUp 1s 0.5s forwards;}
+.hero-title em{font-style:italic;color:var(--gold);display:block;}
+.hero-subtitle{margin-top:32px;font-size:12px;letter-spacing:0.3em;color:var(--text-dim);text-transform:uppercase;line-height:2;opacity:0;animation:fadeUp 1s 0.7s forwards;}
+.hero-cta{margin-top:48px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp 1s 0.9s forwards;}
+.btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-dark));border:none;border-radius:50px;padding:16px 40px;color:var(--black);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;cursor:none;transition:var(--transition);box-shadow:0 0 40px rgba(201,168,76,0.2);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(201,168,76,0.4);}
+.btn-glass{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:50px;padding:16px 40px;color:var(--text);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;cursor:none;transition:var(--transition);backdrop-filter:blur(10px);}
+.btn-glass:hover{background:rgba(201,168,76,0.1);border-color:rgba(201,168,76,0.4);color:var(--gold);transform:translateY(-2px);}
+.hero-float{position:absolute;background:rgba(255,255,255,0.03);border:1px solid rgba(201,168,76,0.12);border-radius:16px;backdrop-filter:blur(20px);padding:16px 20px;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);opacity:0;}
+.hero-float.f1{top:25%;left:8%;animation:fadeUp 1s 1.2s forwards,float 6s 2.2s ease-in-out infinite;}
+.hero-float.f2{top:35%;right:8%;animation:fadeUp 1s 1.4s forwards,float 6s 2.4s ease-in-out infinite;}
+.hero-float.f3{bottom:25%;left:12%;animation:fadeUp 1s 1.6s forwards,float 6s 2.6s ease-in-out infinite;}
+.hero-float-icon{font-size:20px;margin-bottom:6px;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+ 
+/* HIGHLIGHTS */
+.highlights{padding:80px 40px;display:flex;flex-direction:column;align-items:center;background:linear-gradient(180deg,#111 0%,#0A0A0A 100%);}
+.section-label{font-size:10px;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;margin-bottom:48px;position:relative;}
+.section-label::before,.section-label::after{content:'';position:absolute;top:50%;width:40px;height:1px;background:rgba(201,168,76,0.3);}
+.section-label::before{right:calc(100% + 16px);}
+.section-label::after{left:calc(100% + 16px);}
+.highlights-row{display:flex;gap:24px;flex-wrap:wrap;justify-content:center;}
+.highlight-item{display:flex;flex-direction:column;align-items:center;gap:12px;cursor:none;transition:var(--transition);}
+.highlight-item:hover{transform:translateY(-6px);}
+.highlight-ring{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dark),rgba(201,168,76,0.3));padding:2px;box-shadow:0 0 20px rgba(201,168,76,0.2);}
+.highlight-inner{width:100%;height:100%;border-radius:50%;background:rgba(20,15,8,0.9);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;font-size:24px;transition:var(--transition);}
+.highlight-item:hover .highlight-inner{background:rgba(201,168,76,0.15);}
+.highlight-label{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);text-align:center;}
+ 
+/* ABOUT */
+.about{padding:120px 40px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.about-text h2{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,64px);font-weight:300;line-height:1.1;margin-bottom:24px;}
+.about-text h2 span{color:var(--gold);font-style:italic;}
+.about-text p{color:var(--text-dim);line-height:2;font-size:13px;margin-bottom:16px;}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px;}
+.stat-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:16px;padding:24px;backdrop-filter:blur(10px);transition:var(--transition);}
+.stat-card:hover{background:rgba(201,168,76,0.06);border-color:rgba(201,168,76,0.3);}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:40px;color:var(--gold);font-weight:300;}
+.stat-label{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);margin-top:4px;}
+.about-visual{position:relative;}
+.about-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);padding:40px;backdrop-filter:blur(20px);box-shadow:var(--glass-shadow);position:relative;overflow:hidden;}
+.about-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(201,168,76,0.04) 0%,transparent 60%);pointer-events:none;}
+.about-card-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);margin-bottom:20px;font-style:italic;}
+.about-detail{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(201,168,76,0.08);}
+.about-detail:last-child{border-bottom:none;}
+.about-detail-icon{font-size:18px;margin-top:2px;}
+.about-detail-text{font-size:12px;color:var(--text-dim);line-height:1.8;}
+.about-detail-text strong{color:var(--text);font-weight:500;}
+ 
+/* SHOP */
+.shop{padding:120px 40px;background:linear-gradient(180deg,#0A0A0A 0%,#111 50%,#0A0A0A 100%);}
+.shop-header{text-align:center;margin-bottom:60px;}
+.shop-header h2{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,72px);font-weight:300;}
+.shop-header h2 em{color:var(--gold);font-style:italic;}
+.categories{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:48px;}
+.cat-btn{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:50px;padding:10px 24px;color:var(--text-dim);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;cursor:none;transition:var(--transition);backdrop-filter:blur(10px);}
+.cat-btn:hover,.cat-btn.active{background:linear-gradient(135deg,rgba(201,168,76,0.2),rgba(201,168,76,0.05));border-color:rgba(201,168,76,0.5);color:var(--gold);box-shadow:0 0 20px rgba(201,168,76,0.1);}
+.filter-bar{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);padding:24px 32px;backdrop-filter:blur(20px);margin-bottom:48px;display:flex;align-items:center;gap:32px;flex-wrap:wrap;}
+.filter-label{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);}
+.price-filter{flex:1;min-width:200px;}
+.price-range-wrap{position:relative;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:16px;}
+.price-range-fill{position:absolute;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:2px;transition:all 0.2s;}
+input[type=range]{position:absolute;width:100%;height:4px;opacity:0;cursor:none;top:0;pointer-events:all;}
+.price-display{font-size:12px;color:var(--gold);margin-top:8px;letter-spacing:0.1em;}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;}
+.product-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);overflow:hidden;backdrop-filter:blur(20px);transition:var(--transition);cursor:none;position:relative;}
+.product-card:hover{transform:translateY(-8px);border-color:rgba(201,168,76,0.4);box-shadow:0 24px 64px rgba(0,0,0,0.6),0 0 40px rgba(201,168,76,0.08);}
+.product-img-wrap{position:relative;overflow:hidden;aspect-ratio:3/4;background:linear-gradient(135deg,rgba(44,26,14,0.5),rgba(20,15,8,0.8));}
+.product-img-skeleton{position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,0.03) 0%,rgba(201,168,76,0.07) 40%,rgba(255,255,255,0.03) 80%);background-size:400% 100%;animation:shimmer 1.8s ease-in-out infinite;}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.product-card:hover .product-img-wrap img{transform:scale(1.06);}
+.product-badge{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--black);font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;padding:4px 10px;border-radius:50px;}
+.product-badge.sale{background:linear-gradient(135deg,#e74c3c,#c0392b);}
+.product-badge.new{background:linear-gradient(135deg,#27ae60,#1e8449);}
+.product-info{padding:20px;}
+.product-tag{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.product-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:8px;line-height:1.2;}
+.product-price-row{display:flex;align-items:center;justify-content:space-between;margin-top:16px;}
+.product-price{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);}
+.product-price-old{font-size:12px;color:var(--text-dim);text-decoration:line-through;margin-left:8px;}
+.product-buy{background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:50px;padding:8px 20px;color:var(--gold);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;cursor:none;transition:var(--transition);}
+.product-buy:hover{background:var(--gold);color:var(--black);}
+.product-emoji{position:absolute;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:80px;opacity:0.15;}
+ 
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.4s;padding:20px;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:rgba(18,14,10,0.95);border:1px solid rgba(201,168,76,0.2);border-radius:24px;max-width:800px;width:100%;backdrop-filter:blur(40px);box-shadow:0 32px 80px rgba(0,0,0,0.8);transform:translateY(40px) scale(0.96);transition:transform 0.4s cubic-bezier(0.23,1,0.32,1);overflow:hidden;max-height:90vh;overflow-y:auto;}
+.modal-overlay.open .modal{transform:translateY(0) scale(1);}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;}
+.modal-img{aspect-ratio:1;background:linear-gradient(135deg,rgba(44,26,14,0.6),rgba(20,15,8,0.9));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.modal-body{padding:40px;}
+.modal-tag{font-size:9px;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:16px;}
+.modal-desc{font-size:12px;color:var(--text-dim);line-height:2;margin-bottom:24px;}
+.modal-price{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--gold);margin-bottom:16px;}
+.modal-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:50%;width:36px;height:36px;color:var(--text-dim);font-size:18px;cursor:none;display:flex;align-items:center;justify-content:center;transition:var(--transition);}
+.modal-close:hover{background:rgba(201,168,76,0.1);color:var(--gold);}
+.size-label{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.size-row{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.size-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 14px;font-size:11px;color:var(--text-dim);cursor:none;transition:var(--transition);}
+.size-btn:hover,.size-btn.active{background:rgba(201,168,76,0.15);border-color:var(--gold);color:var(--gold);}
+ 
+/* CART PANEL */
+.cart-panel{position:fixed;right:0;top:0;bottom:0;width:400px;z-index:1500;background:rgba(12,9,6,0.97);border-left:1px solid rgba(201,168,76,0.15);backdrop-filter:blur(40px);transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.23,1,0.32,1);display:flex;flex-direction:column;box-shadow:-24px 0 80px rgba(0,0,0,0.8);}
+.cart-panel.open{transform:translateX(0);}
+.cart-header{padding:24px 32px;border-bottom:1px solid rgba(201,168,76,0.1);display:flex;align-items:center;justify-content:space-between;}
+.cart-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;}
+.panel-close{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:50%;width:32px;height:32px;color:var(--text-dim);cursor:none;display:flex;align-items:center;justify-content:center;font-size:16px;transition:var(--transition);}
+.panel-close:hover{background:rgba(201,168,76,0.1);color:var(--gold);}
+.cart-items{flex:1;overflow-y:auto;padding:24px 32px;}
+.cart-item{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.05);align-items:center;}
+.cart-item-img{width:64px;height:80px;border-radius:10px;background:linear-gradient(135deg,rgba(44,26,14,0.8),rgba(20,15,8,0.9));display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;}
+.cart-item-info{flex:1;}
+.cart-item-name{font-size:13px;font-weight:400;margin-bottom:4px;}
+.cart-item-price{font-size:12px;color:var(--gold);}
+.cart-item-size{font-size:10px;color:var(--text-dim);margin-top:4px;}
+.qty-control{display:flex;align-items:center;gap:10px;margin-top:8px;}
+.qty-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;width:24px;height:24px;color:var(--text);cursor:none;display:flex;align-items:center;justify-content:center;font-size:14px;transition:var(--transition);}
+.qty-btn:hover{background:rgba(201,168,76,0.1);color:var(--gold);}
+.qty-val{font-size:12px;min-width:20px;text-align:center;}
+.remove-btn{background:none;border:none;color:rgba(255,100,100,0.4);cursor:none;font-size:18px;transition:color 0.3s;padding:4px;}
+.remove-btn:hover{color:rgba(255,100,100,0.9);}
+.cart-footer{padding:24px 32px;border-top:1px solid rgba(201,168,76,0.1);position:relative;}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.cart-total-label{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);}
+.cart-total-price{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold);}
+.cart-empty{text-align:center;padding:60px 20px;color:var(--text-dim);font-size:12px;}
+.cart-empty-icon{font-size:48px;margin-bottom:16px;opacity:0.3;}
+ 
+/* SECRET ADMIN ARROW */
+.secret-admin-btn{
+  position:absolute;bottom:10px;right:12px;
+  background:none;border:none;
+  color:rgba(201,168,76,0.55);
+  font-size:18px;cursor:none;
+  padding:4px 6px;line-height:1;
+  transition:color 0.3s ease, text-shadow 0.3s ease;
+  text-decoration:none;
+  display:flex;align-items:center;justify-content:center;
+  text-shadow:0 0 8px rgba(201,168,76,0.4);
+  font-weight:300;letter-spacing:0;
+}
+.secret-admin-btn:hover{
+  color:rgba(201,168,76,0.95);
+  text-shadow:0 0 14px rgba(201,168,76,0.7),0 0 28px rgba(201,168,76,0.3);
+}
+ 
+/* CHECKOUT PANEL */
+.checkout-panel{position:fixed;right:0;top:0;bottom:0;width:480px;z-index:1600;background:rgba(10,8,5,0.98);border-left:1px solid rgba(201,168,76,0.15);backdrop-filter:blur(40px);transform:translateX(100%);transition:transform 0.5s cubic-bezier(0.23,1,0.32,1);display:flex;flex-direction:column;box-shadow:-32px 0 100px rgba(0,0,0,0.9);overflow-y:auto;}
+.checkout-panel.open{transform:translateX(0);}
+.checkout-header{padding:24px 32px;border-bottom:1px solid rgba(201,168,76,0.1);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(10,8,5,0.98);z-index:10;}
+.checkout-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;}
+.checkout-body{padding:32px;flex:1;}
+.form-group{margin-bottom:20px;}
+.form-label{display:block;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.form-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 18px;color:var(--text);font-family:'Montserrat',sans-serif;font-size:13px;outline:none;transition:var(--transition);}
+.form-input:focus{border-color:rgba(201,168,76,0.5);background:rgba(201,168,76,0.04);box-shadow:0 0 0 3px rgba(201,168,76,0.06);}
+.form-input::placeholder{color:rgba(240,234,214,0.25);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.payment-methods{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
+.payment-card{background:var(--glass-bg);border:2px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;text-align:center;cursor:none;transition:var(--transition);}
+.payment-card.selected{border-color:var(--gold);background:rgba(201,168,76,0.08);}
+.payment-card:hover{border-color:rgba(201,168,76,0.4);}
+.payment-logo{font-size:22px;margin-bottom:6px;}
+.payment-name{font-size:11px;font-weight:600;letter-spacing:0.1em;}
+.payment-desc{font-size:9px;color:var(--text-dim);margin-top:2px;}
+.verify-screen{display:none;text-align:center;padding:40px 0;}
+.verify-screen.show{display:block;}
+.checkout-form-screen.hide{display:none;}
+.verify-title{font-family:'Cormorant Garamond',serif;font-size:28px;margin-bottom:12px;}
+.verify-sub{font-size:12px;color:var(--text-dim);line-height:2;margin-bottom:32px;}
+.otp-row{display:flex;gap:10px;justify-content:center;margin-bottom:32px;}
+.otp-input{width:52px;height:60px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:12px;text-align:center;font-size:22px;font-weight:600;color:var(--text);outline:none;transition:var(--transition);font-family:'Montserrat',sans-serif;}
+.otp-input:focus{border-color:var(--gold);background:rgba(201,168,76,0.05);}
+.success-screen{position:fixed;inset:0;z-index:3000;background:rgba(5,8,5,0.97);backdrop-filter:blur(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.4s;text-align:center;padding:40px;}
+.success-screen.show{opacity:1;pointer-events:all;}
+.success-icon{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,rgba(39,174,96,0.2),rgba(39,174,96,0.05));border:2px solid rgba(39,174,96,0.4);display:flex;align-items:center;justify-content:center;font-size:40px;margin-bottom:32px;animation:successPop 0.6s cubic-bezier(0.23,1,0.32,1) forwards;transform:scale(0);}
+@keyframes successPop{to{transform:scale(1)}}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:40px;margin-bottom:16px;font-weight:300;}
+.success-sub{font-size:13px;color:var(--text-dim);line-height:2;max-width:360px;margin:0 auto 32px;}
+ 
+/* ===== ADMIN LOGIN SCREEN ===== */
+.admin-login-screen{
+  position:fixed;inset:0;z-index:4000;
+  background:rgba(5,4,3,0.98);
+  backdrop-filter:blur(30px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.5s cubic-bezier(0.23,1,0.32,1);
+  padding:40px;
+}
+.admin-login-screen.show{opacity:1;pointer-events:all;}
+.admin-login-card{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(201,168,76,0.2);
+  border-radius:28px;
+  padding:52px 48px;
+  width:100%;max-width:420px;
+  backdrop-filter:blur(40px);
+  box-shadow:0 40px 100px rgba(0,0,0,0.8),0 0 60px rgba(201,168,76,0.05);
+  position:relative;
+  transform:translateY(30px) scale(0.97);
+  transition:transform 0.5s cubic-bezier(0.23,1,0.32,1);
+}
+.admin-login-screen.show .admin-login-card{transform:translateY(0) scale(1);}
+.admin-login-card::before{
+  content:'';position:absolute;top:-1px;left:30%;right:30%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.admin-login-logo{
+  font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;
+  color:var(--gold);text-align:center;margin-bottom:6px;
+}
+.admin-login-sub{
+  text-align:center;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:40px;
+}
+.login-error{
+  background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.25);
+  border-radius:10px;padding:10px 16px;font-size:11px;color:rgba(231,76,60,0.9);
+  margin-bottom:20px;text-align:center;
+  display:none;
+}
+.login-error.show{display:block;}
+.admin-login-close{
+  position:absolute;top:16px;right:16px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:50%;width:30px;height:30px;cursor:none;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-dim);font-size:14px;transition:var(--transition);
+}
+.admin-login-close:hover{background:rgba(201,168,76,0.1);color:var(--gold);}
+ 
+/* ===== ADMIN PANEL (tam ekran) ===== */
+.admin-section{
+  position:fixed;inset:0;z-index:3500;
+  background:var(--black);
+  overflow-y:auto;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.4s;
+}
+.admin-section.show{opacity:1;pointer-events:all;}
+.admin-nav{
+  position:sticky;top:0;z-index:10;
+  padding:0 40px;height:72px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,10,10,0.95);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(201,168,76,0.12);
+}
+.admin-nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;letter-spacing:0.2em;color:var(--gold);font-style:italic;}
+.admin-nav-logo span{font-size:10px;letter-spacing:0.3em;color:var(--text-dim);font-style:normal;display:block;margin-top:-2px;}
+.admin-back-btn{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);
+  border-radius:50px;padding:10px 24px;
+  color:var(--text-dim);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  cursor:none;transition:var(--transition);
+  display:flex;align-items:center;gap:8px;
+}
+.admin-back-btn:hover{background:rgba(201,168,76,0.08);border-color:rgba(201,168,76,0.3);color:var(--gold);}
+.admin-content{padding:48px 40px;}
+ 
+/* WELCOME BANNER */
+.admin-welcome{
+  background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(201,168,76,0.02));
+  border:1px solid rgba(201,168,76,0.2);
+  border-radius:20px;padding:32px 40px;
+  margin-bottom:40px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;
+}
+.admin-welcome-text h2{
+  font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:4px;
+}
+.admin-welcome-text h2 em{color:var(--gold);font-style:italic;}
+.admin-welcome-text p{font-size:12px;color:var(--text-dim);letter-spacing:0.05em;}
+.admin-welcome-badge{
+  background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.25);
+  border-radius:12px;padding:16px 24px;text-align:center;min-width:120px;
+}
+.admin-welcome-badge-num{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--gold);}
+.admin-welcome-badge-label{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);margin-top:2px;}
+ 
+/* STATS ROW */
+.admin-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:40px;}
+.admin-stat{
+  background:var(--glass-bg);border:1px solid var(--glass-border);
+  border-radius:16px;padding:24px;backdrop-filter:blur(10px);
+  transition:var(--transition);
+}
+.admin-stat:hover{border-color:rgba(201,168,76,0.3);background:rgba(201,168,76,0.04);}
+.admin-stat-icon{font-size:24px;margin-bottom:10px;}
+.admin-stat-num{font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--gold);font-weight:300;}
+.admin-stat-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);margin-top:4px;}
+ 
+/* VISITORS */
+.visitors-badge{
+  background:rgba(39,174,96,0.06);border:1px solid rgba(39,174,96,0.2);
+  border-radius:16px;padding:24px;
+  display:flex;align-items:center;gap:16px;margin-bottom:40px;
+}
+.visitors-dot{width:10px;height:10px;border-radius:50%;background:#27ae60;box-shadow:0 0 12px rgba(39,174,96,0.6);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.6;transform:scale(1.2);}}
+.visitors-info h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--text);margin-bottom:2px;}
+.visitors-info p{font-size:11px;color:var(--text-dim);}
+.visitors-count{font-family:'Cormorant Garamond',serif;font-size:40px;color:#27ae60;margin-left:auto;}
+ 
+/* ORDERS */
+.orders-section-title{
+  font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:20px;display:flex;align-items:center;gap:12px;
+}
+.orders-section-title::after{content:'';flex:1;height:1px;background:rgba(201,168,76,0.15);}
+.orders-grid{display:grid;gap:12px;}
+.order-card{
+  background:var(--glass-bg);border:1px solid var(--glass-border);
+  border-radius:18px;padding:22px 28px;backdrop-filter:blur(10px);
+  display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;
+  transition:var(--transition);
+}
+.order-card:hover{border-color:rgba(201,168,76,0.3);}
+.order-card.approved{border-color:rgba(39,174,96,0.25);background:rgba(39,174,96,0.025);}
+.order-id{font-size:10px;letter-spacing:0.2em;color:var(--gold);margin-bottom:6px;text-transform:uppercase;}
+.order-customer{font-size:15px;font-weight:400;margin-bottom:3px;}
+.order-details{font-size:12px;color:var(--text-dim);line-height:1.7;}
+.order-status{display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+.status-badge{padding:5px 14px;border-radius:50px;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;}
+.status-badge.pending{background:rgba(255,193,7,0.1);color:#FFC107;border:1px solid rgba(255,193,7,0.2);}
+.status-badge.approved{background:rgba(39,174,96,0.1);color:#27ae60;border:1px solid rgba(39,174,96,0.2);}
+.approve-btn{background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.25);border-radius:50px;padding:8px 18px;color:#27ae60;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;cursor:none;transition:var(--transition);}
+.approve-btn:hover{background:rgba(39,174,96,0.18);}
+.no-orders{text-align:center;padding:60px;color:var(--text-dim);font-size:13px;}
+.no-orders-icon{font-size:40px;margin-bottom:16px;opacity:0.25;}
+ 
+/* FOOTER */
+footer{background:var(--black);border-top:1px solid rgba(201,168,76,0.1);padding:60px 40px 40px;text-align:center;}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--gold);font-style:italic;margin-bottom:8px;}
+.footer-sub{font-size:10px;letter-spacing:0.3em;color:var(--text-dim);text-transform:uppercase;margin-bottom:32px;}
+.footer-links{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-bottom:40px;}
+.footer-links a{font-size:10px;letter-spacing:0.2em;color:var(--text-dim);text-decoration:none;text-transform:uppercase;transition:color 0.3s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-copy{font-size:10px;color:rgba(240,234,214,0.2);letter-spacing:0.1em;}
+.divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 32px;}
+ 
+/* NOTIFICATION */
+.notification{position:fixed;bottom:32px;right:32px;z-index:9000;background:rgba(18,14,10,0.97);border:1px solid rgba(201,168,76,0.3);border-radius:16px;padding:16px 24px;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,0.5);transform:translateY(100px);opacity:0;transition:transform 0.4s cubic-bezier(0.23,1,0.32,1),opacity 0.4s;max-width:320px;display:flex;gap:12px;align-items:center;}
+.notification.show{transform:translateY(0);opacity:1;}
+.notification-icon{font-size:20px;}
+.notification-text{font-size:12px;color:var(--text);line-height:1.6;}
+.notification-text strong{color:var(--gold);}
+ 
+/* OVERLAY */
+.overlay{position:fixed;inset:0;z-index:1400;background:rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:opacity 0.4s;backdrop-filter:blur(4px);}
+.overlay.show{opacity:1;pointer-events:all;}
+ 
+@media(max-width:900px){
+  nav{padding:0 20px;}.nav-links{display:none;}
+  .about{grid-template-columns:1fr;gap:40px;padding:80px 20px;}
+  .modal-grid{grid-template-columns:1fr;}.modal-img{aspect-ratio:16/9;}
+  .cart-panel,.checkout-panel{width:100%;}
+  .hero-float{display:none;}
+  .shop{padding:80px 20px;}.highlights{padding:60px 20px;}
+  .admin-content{padding:32px 20px;}
+  .admin-nav{padding:0 20px;}
+}
+@media(max-width:600px){
+  .hero-title{font-size:56px;}.form-row{grid-template-columns:1fr;}
+  .products-grid{grid-template-columns:1fr 1fr;}
+  .admin-stats{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+ 
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+ 
+<div class="notification" id="notification">
+  <span class="notification-icon">✓</span>
+  <div class="notification-text" id="notificationText">Amal bajarildi.</div>
+</div>
+ 
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+ 
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">OLIGARCH<span>O'zbekiston — Toshkent</span></a>
+  <div class="nav-links">
+    <a href="#shop">Kolleksiya</a>
+    <a href="#about">Biz Haqimizda</a>
+  </div>
+  <div class="nav-right">
+    <button class="cart-btn" onclick="toggleCart()">
+      <span>🛍</span> Savat
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</nav>
+ 
+<!-- MAIN PAGE -->
+<div id="mainPage">
+ 
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Toshkent · Malika Bozori · Korzinka Binosi</p>
+      <h1 class="hero-title">OLIGARCH<em>O'zbekiston</em></h1>
+      <p class="hero-subtitle">Premium Erkaklar Kiyimi · Zamonaviy Uslub · Yuqori Sifat</p>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Kolleksiyani Ko'rish</button>
+        <button class="btn-glass" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">Biz Haqimizda</button>
+      </div>
+    </div>
+    <div class="hero-float f1"><div class="hero-float-icon">🏆</div>Yuqori Sifat</div>
+    <div class="hero-float f2"><div class="hero-float-icon">✦</div>Yangi Kolleksiya 2025</div>
+    <div class="hero-float f3"><div class="hero-float-icon">📍</div>Toshkent, O'zbekiston</div>
+  </section>
+ 
+  <section class="highlights" id="highlights">
+    <div class="section-label">Tezkor Ma'lumot</div>
+    <div class="highlights-row">
+      <div class="highlight-item" onclick="notify('🚚 Toshkent bo\'ylab yetkazib berish mavjud!','🚚')">
+        <div class="highlight-ring"><div class="highlight-inner">🚚</div></div>
+        <span class="highlight-label">Yetkazib Berish</span>
+      </div>
+      <div class="highlight-item" onclick="notify('📞 +998 99 123 45 67 — Doim yordam berishga tayyormiz!','📞')">
+        <div class="highlight-ring"><div class="highlight-inner">📞</div></div>
+        <span class="highlight-label">Telefon</span>
+      </div>
+      <div class="highlight-item" onclick="notify('🕐 Du–Sha 9:00–21:00 · Yakshanba 10:00–20:00','🕐')">
+        <div class="highlight-ring"><div class="highlight-inner">🕐</div></div>
+        <span class="highlight-label">Ish Vaqti</span>
+      </div>
+      <div class="highlight-item" onclick="notify('📍 Toshkent, Malika Bozori, Korzinka Binosi, 2-qavat','📍')">
+        <div class="highlight-ring"><div class="highlight-inner">📍</div></div>
+        <span class="highlight-label">Manzil</span>
+      </div>
+      <div class="highlight-item" onclick="notify('💼 Ishga qabul bor! CV: hr@oligarch.uz','💼')">
+        <div class="highlight-ring"><div class="highlight-inner">💼</div></div>
+        <span class="highlight-label">Vakansiya</span>
+      </div>
+    </div>
+  </section>
+ 
+  <section class="about" id="about">
+    <div class="about-text">
+      <h2>Zamonaviy Erkak uchun <span>Yaratilgan</span></h2>
+      <p>OLIGARCH — O'zbekistonning eng yirik premium erkaklar kiyim brendi. Toshkentning markazida joylashgan bo'lib, an'anaviy hunarmandchilik va zamonaviy hashamatni birlashtiradi.</p>
+      <p>Har bir mahsulotimiz zamonaviy erkaklikning mohiyatini — jasur, nozik va murosasiz premium sifatni ifodalaydi.</p>
+      <div class="about-stats">
+        <div class="stat-card"><div class="stat-num">500+</div><div class="stat-label">Premium Mahsulot</div></div>
+        <div class="stat-card"><div class="stat-num">3 ming+</div><div class="stat-label">Mamnun Mijoz</div></div>
+        <div class="stat-card"><div class="stat-num">5★</div><div class="stat-label">Reyting</div></div>
+        <div class="stat-card"><div class="stat-num">2 yil</div><div class="stat-label">Tajriba</div></div>
+      </div>
+    </div>
+    <div class="about-visual">
+      <div class="about-card">
+        <div class="about-card-title">Do'konimizga Tashrif Buyuring</div>
+        <div class="about-detail">
+          <span class="about-detail-icon">📍</span>
+          <div class="about-detail-text"><strong>Toshkent, O'zbekiston</strong><br>Malika Bozori, Korzinka Binosi<br>2-qavat, 47-do'kon</div>
+        </div>
+        <div class="about-detail">
+          <span class="about-detail-icon">📞</span>
+          <div class="about-detail-text"><strong>+998 99 123 45 67</strong><br>Dushanba – Shanba</div>
+        </div>
+        <div class="about-detail">
+          <span class="about-detail-icon">🕐</span>
+          <div class="about-detail-text"><strong>Du – Sha:</strong> 9:00 – 21:00<br><strong>Yakshanba:</strong> 10:00 – 20:00</div>
+        </div>
+        <div class="about-detail">
+          <span class="about-detail-icon">📱</span>
+          <div class="about-detail-text"><strong>@oligarch.uz</strong><br>Instagram · Telegram</div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <section class="shop" id="shop">
+    <div class="shop-header">
+      <div class="section-label">Bizning Kolleksiya</div>
+      <h2>OLIGARCH <em>Tanlovlari</em></h2>
+    </div>
+    <div class="categories">
+      <button class="cat-btn active" onclick="filterCat('all',this)">Barcha Mahsulotlar</button>
+      <button class="cat-btn" onclick="filterCat('sale',this)">Chegirma</button>
+      <button class="cat-btn" onclick="filterCat('top',this)">Top Mahsulotlar</button>
+      <button class="cat-btn" onclick="filterCat('trending',this)">Trend / Moda</button>
+      <button class="cat-btn" onclick="filterCat('new',this)">Yangi Kelganlar</button>
+    </div>
+    <div class="filter-bar">
+      <span class="filter-label">Narx Filtri</span>
+      <div class="price-filter">
+        <div class="price-range-wrap">
+          <div class="price-range-fill" id="priceRangeFill"></div>
+          <input type="range" id="priceRange" min="0" max="2000000" step="50000" value="2000000" oninput="filterPrice(this.value)">
+        </div>
+        <div class="price-display" id="priceDisplay">Gacha: 2,000,000 so'm</div>
+      </div>
+    </div>
+    <div class="products-grid" id="productsGrid"></div>
+  </section>
+ 
+  <footer>
+    <div class="footer-logo">OLIGARCH</div>
+    <div class="footer-sub">O'zbekiston · 2023-yildan beri</div>
+    <div class="divider"></div>
+    <div class="footer-links">
+      <a href="#home">Bosh Sahifa</a>
+      <a href="#shop">Kolleksiya</a>
+      <a href="#about">Biz Haqimizda</a>
+    </div>
+    <div class="footer-copy">© 2025 OLIGARCH O'zbekiston. Toshkent, Malika Bozori, Korzinka Binosi.</div>
+  </footer>
+ 
+</div><!-- /mainPage -->
+ 
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-grid">
+      <div class="modal-img" id="modalImg"></div>
+      <div class="modal-body">
+        <div class="modal-tag" id="modalTag"></div>
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <p class="modal-desc" id="modalDesc"></p>
+        <div class="modal-price" id="modalPrice"></div>
+        <div class="size-label">O'lcham tanlang</div>
+        <div class="size-row" id="sizeRow"></div>
+        <button class="btn-primary" style="width:100%" onclick="addToCartFromModal()">Savatga Qo'shish</button>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- CART PANEL -->
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h2 class="cart-title">Savatingiz</h2>
+    <button class="panel-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty"><div class="cart-empty-icon">🛍</div>Savatingiz bo'sh</div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total">
+      <span class="cart-total-label">Jami Narx</span>
+      <span class="cart-total-price" id="cartTotal">0 so'm</span>
+    </div>
+    <button class="btn-primary" style="width:100%" onclick="openCheckout()">Buyurtma Berish</button>
+    <!-- YASHIRIN ADMIN ARROW -->
+    <a class="secret-admin-btn" onclick="openAdminLogin();return false;" href="#" title="">›</a>
+  </div>
+  <!-- Savat bo'sh bo'lganda ham yashirin arrow pastda -->
+  <div style="position:relative;height:32px;">
+    <a class="secret-admin-btn" style="position:absolute;bottom:4px;right:12px;" onclick="openAdminLogin();return false;" href="#" title="">›</a>
+  </div>
+</div>
+ 
+<!-- CHECKOUT PANEL -->
+<div class="checkout-panel" id="checkoutPanel">
+  <div class="checkout-header">
+    <h2 class="checkout-title">Buyurtma Berish</h2>
+    <button class="panel-close" onclick="closeCheckout()">✕</button>
+  </div>
+  <div class="checkout-body">
+    <div class="checkout-form-screen" id="checkoutForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Ism</label>
+          <input class="form-input" id="fName" placeholder="Akmal" type="text">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Familiya</label>
+          <input class="form-input" id="lName" placeholder="Toshmatov" type="text">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telefon Raqam</label>
+        <input class="form-input" id="phone" placeholder="+998 99 000 00 00" type="tel">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Karta Raqami (Demo)</label>
+        <input class="form-input" id="cardNum" placeholder="8600 0000 0000 0000" maxlength="19" oninput="formatCard(this)">
+      </div>
+      <div class="form-group">
+        <label class="form-label">To'lov Usuli</label>
+        <div class="payment-methods">
+          <div class="payment-card selected" id="pay-payme" onclick="selectPayment('payme')">
+            <div class="payment-logo">💳</div>
+            <div class="payment-name" style="color:#00AAFF">Payme</div>
+            <div class="payment-desc">Tezkor o'tkazma</div>
+          </div>
+          <div class="payment-card" id="pay-click" onclick="selectPayment('click')">
+            <div class="payment-logo">⚡</div>
+            <div class="payment-name" style="color:#FF6600">Click</div>
+            <div class="payment-desc">Tezkor to'lov</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:32px;">
+        <div class="cart-total" style="margin-bottom:20px">
+          <span class="cart-total-label">Jami Summa</span>
+          <span class="cart-total-price" id="checkoutTotal">0 so'm</span>
+        </div>
+        <button class="btn-primary" style="width:100%" onclick="submitOrder()">Buyurtma Berish va Kod Olish</button>
+      </div>
+    </div>
+    <div class="verify-screen" id="verifyScreen">
+      <div class="verify-title">SMS Tasdiqlash</div>
+      <p class="verify-sub"><strong id="verifyPhone" style="color:var(--gold)"></strong> raqamiga 4 xonali kod yuborildi.<br>Demo kod: <strong style="color:var(--gold)" id="demoCode"></strong></p>
+      <div class="otp-row">
+        <input class="otp-input" maxlength="1" oninput="otpNext(this,0)" id="otp0">
+        <input class="otp-input" maxlength="1" oninput="otpNext(this,1)" id="otp1">
+        <input class="otp-input" maxlength="1" oninput="otpNext(this,2)" id="otp2">
+        <input class="otp-input" maxlength="1" oninput="otpNext(this,3)" id="otp3">
+      </div>
+      <button class="btn-primary" style="width:100%" onclick="verifyOTP()">Buyurtmani Tasdiqlash</button>
+      <p style="margin-top:16px;font-size:11px;color:var(--text-dim)">Kod kelmadimi? <span style="color:var(--gold);cursor:pointer" onclick="resendCode()">Qayta yuborish</span></p>
+    </div>
+  </div>
+</div>
+ 
+<!-- SUCCESS SCREEN -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">✓</div>
+  <h2 class="success-title">Buyurtma Tasdiqlandi!</h2>
+  <p class="success-sub">Buyurtmangiz muvaffaqiyatli qabul qilindi. Jamoamiz siz bilan tez orada bog'lanadi.</p>
+  <div style="margin-bottom:24px;padding:16px 24px;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.2);border-radius:12px;">
+    <div style="font-size:10px;letter-spacing:0.2em;color:#27ae60;text-transform:uppercase;margin-bottom:4px;">Buyurtma Raqami</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold)" id="orderRef"></div>
+  </div>
+  <button class="btn-primary" onclick="hideSuccess()">Xaridni Davom Ettirish</button>
+</div>
+ 
+<!-- ============ ADMIN LOGIN SCREEN ============ -->
+<div class="admin-login-screen" id="adminLoginScreen">
+  <div class="admin-login-card">
+    <button class="admin-login-close" onclick="closeAdminLogin()">✕</button>
+    <div class="admin-login-logo">OLIGARCH</div>
+    <div class="admin-login-sub">Admin Panel · Kirish</div>
+    <div class="login-error" id="loginError">Login yoki parol noto'g'ri!</div>
+    <div class="form-group">
+      <label class="form-label">Login</label>
+      <input class="form-input" id="adminLogin" placeholder="Login" type="text" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Parol</label>
+      <input class="form-input" id="adminPass" placeholder="••••••••" type="password" onkeydown="if(event.key==='Enter')doAdminLogin()">
+    </div>
+    <div style="margin-top:8px;">
+      <button class="btn-primary" style="width:100%" onclick="doAdminLogin()">Kirish</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ============ ADMIN PANEL (full screen) ============ -->
+<div class="admin-section" id="adminSection">
+  <div class="admin-nav">
+    <div class="admin-nav-logo">OLIGARCH<span>Admin Boshqaruv Paneli</span></div>
+    <button class="admin-back-btn" onclick="adminLogout()">← Chiqish</button>
+  </div>
+  <div class="admin-content">
+ 
+    <!-- WELCOME -->
+    <div class="admin-welcome">
+      <div class="admin-welcome-text">
+        <h2>Xush Kelibsiz, <em>Admin</em></h2>
+        <p>OLIGARCH boshqaruv paneli — barcha buyurtmalar va statistikalar</p>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <div class="admin-welcome-badge">
+          <div class="admin-welcome-badge-num" id="statOrders">0</div>
+          <div class="admin-welcome-badge-label">Jami Buyurtma</div>
+        </div>
+        <div class="admin-welcome-badge" style="border-color:rgba(39,174,96,0.3);background:rgba(39,174,96,0.06);">
+          <div class="admin-welcome-badge-num" style="color:#27ae60" id="statApproved">0</div>
+          <div class="admin-welcome-badge-label">Tasdiqlangan</div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- VISITORS -->
+    <div class="visitors-badge">
+      <div class="visitors-dot"></div>
+      <div class="visitors-info">
+        <h3>Sayt Tashrif Buyuruvchilari</h3>
+        <p>Ushbu sessiya ichida saytga tashrif buyurganlar soni</p>
+      </div>
+      <div class="visitors-count" id="visitorCount">0</div>
+    </div>
+ 
+    <!-- STATS -->
+    <div class="admin-stats">
+      <div class="admin-stat">
+        <div class="admin-stat-icon">📦</div>
+        <div class="admin-stat-num" id="statTotal">0</div>
+        <div class="admin-stat-label">Jami Buyurtma</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-icon">✅</div>
+        <div class="admin-stat-num" id="statApproved2">0</div>
+        <div class="admin-stat-label">Tasdiqlangan</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-icon">⏳</div>
+        <div class="admin-stat-num" id="statPending">0</div>
+        <div class="admin-stat-label">Kutilmoqda</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-icon">💰</div>
+        <div class="admin-stat-num" id="statRevenue">0</div>
+        <div class="admin-stat-label">Jami Summa (so'm)</div>
+      </div>
+    </div>
+ 
+    <!-- ORDERS -->
+    <div class="orders-section-title">Barcha Buyurtmalar</div>
+    <div class="orders-grid" id="ordersGrid">
+      <div class="no-orders"><div class="no-orders-icon">📋</div>Hali buyurtma yo'q.</div>
+    </div>
+ 
+  </div>
+</div>
+ 
+<script>
+// ============ DATA ============
+const products=[
+  {id:1,name:'Qora Blazer',tag:'Yangi Kelganlar',cat:'new',price:1850000,badge:'new',
+   img:'https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=600&h=800&fit=crop&q=85',
+   desc:'Tuzilgan elegantlikning asari. Bu tikuvchilik bilan ishlangan qora blazer italiya jun matosidan tayyorlangan — zamonaviy o\'zbek janobiga mukammal tanlov.',sizes:['S','M','L','XL','XXL']},
+  {id:2,name:'Kechki Zigir Ko\'ylak',tag:'Trend',cat:'trending',price:690000,badge:'trend',
+   img:'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&h=800&fit=crop&q=85',
+   desc:'Premium Misr zigiridan to\'qilgan bu ko\'ylak ham ofis, ham kechki tadbirlar uchun beg\'ubor zarafotlik bilan oqadi.',sizes:['S','M','L','XL']},
+  {id:3,name:'Klassik Shim',tag:'Top Mahsulotlar',cat:'top',price:950000,badge:'top',
+   img:'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&h=800&fit=crop&q=85',
+   desc:'Qo\'lda to\'qilgan jun aralashmasidan tayyorlangan bu shim — nozik erkak uchun zamonaviy tikuvchilik bilan yangilangan klassik siluet.',sizes:['30','32','34','36','38']},
+  {id:4,name:'Oltin Nashi Kostyum',tag:'Yangi Kelganlar',cat:'new',price:3200000,oldPrice:4000000,badge:'sale',
+   img:'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&h=800&fit=crop&q=85',
+   desc:'OLIGARCH kolleksiyasining toj gavhari. Nozik oltin ip tafsilotlari bilan ko\'mir rangdagi to\'liq ikki parcha kostyum.',sizes:['S','M','L','XL','XXL']},
+  {id:5,name:'Qum Rangi Polo',tag:'Chegirma',cat:'sale',price:420000,oldPrice:680000,badge:'sale',
+   img:'https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=600&h=800&fit=crop&q=85',
+   desc:'Dam olish kunlari uchun hashamat. Pima paxtadan tayyorlangan bu polo haftasonu zarafotligining asosi hisoblanadi.',sizes:['S','M','L','XL']},
+  {id:6,name:'Qora Palto',tag:'Top Mahsulotlar',cat:'top',price:2750000,badge:'top',
+   img:'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=800&fit=crop&q=85',
+   desc:'Bu haybatli qora palto Toshkent qishlari uchun og\'ir keshmir aralashmasida tikilgan — issiq, jasur, unutilmas.',sizes:['M','L','XL','XXL']},
+  {id:7,name:'Ipak Galstuk To\'plami',tag:'Trend',cat:'trending',price:280000,badge:'trend',
+   img:'https://images.unsplash.com/photo-1589756823695-278bc923f962?w=600&h=800&fit=crop&q=85',
+   desc:'OLIGARCH maxsus naqshlarida to\'rtta qo\'lda o\'ralgan ipak galstuk — oddiyni ajoyibdan ajratadigan yakuniy tafsilot.',sizes:['Universal']},
+  {id:8,name:'Charm Kamar',tag:'Chegirma',cat:'sale',price:350000,oldPrice:520000,badge:'sale',
+   img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=800&fit=crop&q=85',
+   desc:'Cho\'tkalanib ishlangan oltin toqali to\'liq donali charm kamar.',sizes:['S','M','L','XL']},
+];
+ 
+let cart=[],currentProduct=null,selectedSize='',selectedPayment='payme';
+let currentOTP='',currentCat='all',maxPrice=2000000,orders=[];
+let visitCount=0;
+ 
+// ============ INIT ============
+window.onload=()=>{
+  renderProducts();updatePriceRange();initCursor();
+  // visitor counter — sessiya boshida +1
+  visitCount=parseInt(sessionStorage.getItem('oligarch_visits')||'0')+1;
+  sessionStorage.setItem('oligarch_visits',visitCount);
+  // pageview count in localStorage for persistence
+  let totalVisits=parseInt(localStorage.getItem('oligarch_total_visits')||'0')+1;
+  localStorage.setItem('oligarch_total_visits',totalVisits);
+};
+ 
+// ============ CURSOR ============
+function initCursor(){
+  const cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+  (function anim(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=(rx-18)+'px';ring.style.top=(ry-18)+'px';requestAnimationFrame(anim);})();
+  document.querySelectorAll('button,a,[onclick]').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ring.style.width='52px';ring.style.height='52px';});
+    el.addEventListener('mouseleave',()=>{ring.style.width='36px';ring.style.height='36px';});
+  });
+}
+ 
+// ============ PRODUCTS ============
+function renderProducts(){
+  const grid=document.getElementById('productsGrid');
+  const f=products.filter(p=>(currentCat==='all'||p.cat===currentCat)&&p.price<=maxPrice);
+  grid.innerHTML=f.length===0
+    ?`<div style="grid-column:1/-1;text-align:center;padding:80px;color:var(--text-dim);font-size:13px">Filtrga mos mahsulot topilmadi.</div>`
+    :f.map(p=>`<div class="product-card" onclick="openModal(${p.id})" style="animation:fadeUp 0.5s ease forwards">
+      <div class="product-img-wrap">
+        <div class="product-img-skeleton"></div>
+        <img src="${p.img}" alt="${p.name}" loading="lazy" onload="this.previousElementSibling.style.display='none';this.style.opacity='1'" style="opacity:0;transition:opacity 0.5s ease;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+        ${p.badge?`<span class="product-badge ${p.badge==='sale'?'sale':p.badge==='new'?'new':''}">${p.badge==='sale'?'CHEGIRMA':p.badge==='new'?'YANGI':'★ TOP'}</span>`:''}
+      </div>
+      <div class="product-info">
+        <div class="product-tag">${p.tag}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-price-row">
+          <div><span class="product-price">${fmt(p.price)}</span>${p.oldPrice?`<span class="product-price-old">${fmt(p.oldPrice)}</span>`:''}</div>
+          <button class="product-buy" onclick="event.stopPropagation();quickAdd(${p.id})">Sotib Olish</button>
+        </div>
+      </div></div>`).join('');
+}
+function fmt(n){return n.toLocaleString('uz-UZ')+' so\'m';}
+function filterCat(cat,btn){currentCat=cat;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderProducts();}
+function filterPrice(v){maxPrice=parseInt(v);document.getElementById('priceDisplay').textContent='Gacha: '+fmt(maxPrice);updatePriceRange();renderProducts();}
+function updatePriceRange(){document.getElementById('priceRangeFill').style.width=(maxPrice/2000000*100)+'%';}
+ 
+// ============ MODAL ============
+function openModal(id){
+  currentProduct=products.find(p=>p.id===id);
+  document.getElementById('modalTag').textContent=currentProduct.tag;
+  document.getElementById('modalTitle').textContent=currentProduct.name;
+  document.getElementById('modalDesc').textContent=currentProduct.desc;
+  document.getElementById('modalPrice').textContent=fmt(currentProduct.price);
+  document.getElementById('modalImg').innerHTML=`
+    <div class="product-img-skeleton" style="position:absolute;inset:0;border-radius:0"></div>
+    <img src="${currentProduct.img}" alt="${currentProduct.name}"
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.5s ease"
+      onload="this.previousElementSibling.style.display='none';this.style.opacity='1'">`;
+  const sr=document.getElementById('sizeRow');
+  sr.innerHTML=currentProduct.sizes.map(s=>`<button class="size-btn" onclick="selectSize(this,'${s}')">${s}</button>`).join('');
+  selectedSize=currentProduct.sizes[0];sr.querySelector('.size-btn').classList.add('active');
+  document.getElementById('productModal').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+}
+function selectSize(btn,s){selectedSize=s;document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function closeModal(){document.getElementById('productModal').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
+function addToCartFromModal(){addToCart(currentProduct,selectedSize);closeModal();}
+function quickAdd(id){const p=products.find(x=>x.id===id);addToCart(p,p.sizes[0]);}
+ 
+// ============ CART ============
+function addToCart(product,size){
+  const ex=cart.find(i=>i.id===product.id&&i.size===size);
+  if(ex)ex.qty++;else cart.push({...product,size,qty:1});
+  updateCartUI();notify('Savatga qo\'shildi: '+product.name,'🛍');
+}
+function updateCartUI(){
+  const n=cart.reduce((a,i)=>a+i.qty,0);
+  document.getElementById('cartCount').textContent=n;
+  document.getElementById('cartCount').style.transform=n>0?'scale(1.3)':'scale(1)';
+  setTimeout(()=>document.getElementById('cartCount').style.transform='scale(1)',300);
+  renderCartItems();
+}
+function renderCartItems(){
+  const items=document.getElementById('cartItems'),footer=document.getElementById('cartFooter');
+  if(cart.length===0){
+    items.innerHTML='<div class="cart-empty"><div class="cart-empty-icon">🛍</div>Savatingiz bo\'sh</div>';
+    footer.style.display='none';return;
+  }
+  footer.style.display='block';
+  items.innerHTML=cart.map((item,i)=>`<div class="cart-item">
+    <div class="cart-item-img" style="overflow:hidden;position:relative;">
+      <img src="${item.img}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" loading="lazy">
+    </div>
+    <div class="cart-item-info">
+      <div class="cart-item-name">${item.name}</div>
+      <div class="cart-item-price">${fmt(item.price*item.qty)}</div>
+      <div class="cart-item-size">O'lcham: ${item.size}</div>
+      <div class="qty-control">
+        <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
+        <span class="qty-val">${item.qty}</span>
+        <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
+      </div>
+    </div>
+    <button class="remove-btn" onclick="removeItem(${i})">✕</button>
+  </div>`).join('');
+  const total=cart.reduce((a,i)=>a+i.price*i.qty,0);
+  document.getElementById('cartTotal').textContent=fmt(total);
+  document.getElementById('checkoutTotal').textContent=fmt(total);
+}
+function changeQty(i,d){cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);updateCartUI();}
+function removeItem(i){cart.splice(i,1);updateCartUI();}
+function toggleCart(){
+  const p=document.getElementById('cartPanel'),ov=document.getElementById('overlay');
+  const open=p.classList.toggle('open');
+  ov.classList.toggle('show',open);
+  if(open){document.getElementById('checkoutPanel').classList.remove('open');renderCartItems();}
+}
+ 
+// ============ CHECKOUT ============
+function openCheckout(){
+  document.getElementById('cartPanel').classList.remove('open');
+  document.getElementById('checkoutPanel').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('checkoutTotal').textContent=fmt(cart.reduce((a,i)=>a+i.price*i.qty,0));
+}
+function closeCheckout(){document.getElementById('checkoutPanel').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
+function selectPayment(m){selectedPayment=m;document.querySelectorAll('.payment-card').forEach(c=>c.classList.remove('selected'));document.getElementById('pay-'+m).classList.add('selected');}
+function formatCard(inp){let v=inp.value.replace(/\D/g,'').substring(0,16);inp.value=v.replace(/(.{4})/g,'$1 ').trim();}
+function submitOrder(){
+  const fn=document.getElementById('fName').value.trim(),ln=document.getElementById('lName').value.trim(),ph=document.getElementById('phone').value.trim();
+  if(!fn||!ln||!ph){notify('Iltimos, barcha maydonlarni to\'ldiring','⚠️');return;}
+  currentOTP=Math.floor(1000+Math.random()*9000).toString();
+  document.getElementById('verifyPhone').textContent=ph;
+  document.getElementById('demoCode').textContent=currentOTP;
+  document.getElementById('checkoutForm').classList.add('hide');
+  document.getElementById('verifyScreen').classList.add('show');
+  document.getElementById('otp0').focus();
+}
+function otpNext(inp,idx){if(inp.value.length===1&&idx<3)document.getElementById('otp'+(idx+1)).focus();}
+function getOTP(){return['otp0','otp1','otp2','otp3'].map(id=>document.getElementById(id).value).join('');}
+function verifyOTP(){
+  if(getOTP()===currentOTP){placeOrder();}
+  else{notify('Noto\'g\'ri kod. Qayta urinib ko\'ring.','❌');['otp0','otp1','otp2','otp3'].forEach(id=>document.getElementById(id).value='');document.getElementById('otp0').focus();}
+}
+function resendCode(){currentOTP=Math.floor(1000+Math.random()*9000).toString();document.getElementById('demoCode').textContent=currentOTP;notify('Yangi kod: '+currentOTP,'📱');}
+function placeOrder(){
+  const oid='OLG-'+Date.now().toString().slice(-6);
+  orders.push({id:oid,customer:document.getElementById('fName').value+' '+document.getElementById('lName').value,phone:document.getElementById('phone').value,items:[...cart],total:cart.reduce((a,i)=>a+i.price*i.qty,0),payment:selectedPayment,status:'pending',date:new Date().toLocaleString()});
+  cart=[];updateCartUI();closeCheckout();
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('orderRef').textContent=oid;
+  document.getElementById('successScreen').classList.add('show');
+  ['fName','lName','phone','cardNum'].forEach(id=>document.getElementById(id).value='');
+  ['otp0','otp1','otp2','otp3'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('checkoutForm').classList.remove('hide');
+  document.getElementById('verifyScreen').classList.remove('show');
+}
+function hideSuccess(){document.getElementById('successScreen').classList.remove('show');}
+ 
+// ============ SECRET ADMIN FLOW ============
+function openAdminLogin(){
+  // Savat panelini yopamiz
+  document.getElementById('cartPanel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+  // Login screen ochiladi
+  document.getElementById('adminLoginScreen').classList.add('show');
+  document.getElementById('adminLogin').value='';
+  document.getElementById('adminPass').value='';
+  document.getElementById('loginError').classList.remove('show');
+  setTimeout(()=>document.getElementById('adminLogin').focus(),300);
+}
+function closeAdminLogin(){
+  document.getElementById('adminLoginScreen').classList.remove('show');
+}
+function doAdminLogin(){
+  const login=document.getElementById('adminLogin').value.trim();
+  const pass=document.getElementById('adminPass').value.trim();
+  if(login==='OLIGARCH'&&pass==='12345'){
+    document.getElementById('adminLoginScreen').classList.remove('show');
+    showAdminPanel();
+  } else {
+    document.getElementById('loginError').classList.add('show');
+    document.getElementById('adminPass').value='';
+    document.getElementById('adminPass').focus();
+    // Silkitish animatsiyasi
+    const card=document.querySelector('.admin-login-card');
+    card.style.animation='shake 0.4s ease';
+    setTimeout(()=>card.style.animation='',400);
+  }
+}
+function showAdminPanel(){
+  document.getElementById('adminSection').classList.add('show');
+  renderAdminOrders();
+  updateAdminStats();
+  // visitor count
+  const total=parseInt(localStorage.getItem('oligarch_total_visits')||'1');
+  document.getElementById('visitorCount').textContent=total;
+}
+function adminLogout(){
+  document.getElementById('adminSection').classList.remove('show');
+  notify('Admin paneldan chiqildi','👋');
+}
+ 
+// ============ ADMIN ORDERS ============
+function renderAdminOrders(){
+  const grid=document.getElementById('ordersGrid');
+  if(orders.length===0){
+    grid.innerHTML='<div class="no-orders"><div class="no-orders-icon">📋</div>Hali buyurtma yo\'q.</div>';
+    return;
+  }
+  grid.innerHTML=orders.map((o,i)=>`
+    <div class="order-card ${o.status==='approved'?'approved':''}">
+      <div>
+        <div class="order-id"># ${o.id} · ${o.date}</div>
+        <div class="order-customer">${o.customer}</div>
+        <div class="order-details">${o.phone} · ${o.payment.toUpperCase()}</div>
+        <div class="order-details">${o.items.map(it=>it.name+' ×'+it.qty).join(' · ')}</div>
+        <div class="order-details" style="margin-top:4px;color:var(--gold);font-size:13px">Jami: ${fmt(o.total)}</div>
+      </div>
+      <div class="order-status">
+        <span class="status-badge ${o.status}">${o.status==='pending'?'Kutilmoqda':'Tasdiqlangan'}</span>
+        ${o.status==='pending'?`<button class="approve-btn" onclick="approveOrder(${i})">Tasdiqlash</button>`:'<span style="font-size:20px">✅</span>'}
+      </div>
+    </div>`).join('');
+}
+function approveOrder(idx){
+  orders[idx].status='approved';
+  renderAdminOrders();updateAdminStats();
+  notify('Buyurtma '+orders[idx].id+' tasdiqlandi!','✅');
+  setTimeout(()=>notify('Mahsulotingiz OLIGARCH tomonidan tasdiqlandi! 🎉','🎉'),2000);
+}
+function updateAdminStats(){
+  const total=orders.length;
+  const approved=orders.filter(o=>o.status==='approved').length;
+  const pending=orders.filter(o=>o.status==='pending').length;
+  const revenue=orders.reduce((a,o)=>a+o.total,0);
+  document.getElementById('statOrders').textContent=total;
+  document.getElementById('statApproved').textContent=approved;
+  document.getElementById('statTotal').textContent=total;
+  document.getElementById('statApproved2').textContent=approved;
+  document.getElementById('statPending').textContent=pending;
+  document.getElementById('statRevenue').textContent=revenue>0?(revenue/1000000).toFixed(1)+' mln':'-';
+}
+ 
+// ============ UTILS ============
+function closeAll(){
+  document.getElementById('cartPanel').classList.remove('open');
+  document.getElementById('checkoutPanel').classList.remove('open');
+  document.getElementById('productModal').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+function notify(msg,icon='✓'){
+  const n=document.getElementById('notification');
+  document.getElementById('notificationText').innerHTML=msg;
+  n.querySelector('.notification-icon').textContent=icon;
+  n.classList.add('show');clearTimeout(n._t);
+  n._t=setTimeout(()=>n.classList.remove('show'),3500);
+}
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').style.background=window.scrollY>80?'rgba(10,10,10,0.92)':'rgba(10,10,10,0.6)';
+});
+ 
+// Shake animation for wrong password
+const shakeStyle=document.createElement('style');
+shakeStyle.textContent=`@keyframes shake{0%,100%{transform:translateX(0) scale(1)}15%{transform:translateX(-8px) scale(0.99)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(6px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}`;
+document.head.appendChild(shakeStyle);
+</script>
+</body>
+</html>
